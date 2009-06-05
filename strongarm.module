@@ -51,7 +51,7 @@ function strongarm_form_alter(&$form, &$form_state, $form_id) {
     $position = STRONGARM_PATTERN_SUFFIX;
   }
 
-  if ($lockdown) {
+  if (!empty($lockdown)) {
     drupal_add_css(drupal_get_path('module', 'strongarm') .'/strongarm.css');
     $altered = _strongarm_lockdown($form, $pattern, $position);
     if ($altered) {
@@ -63,7 +63,7 @@ function strongarm_form_alter(&$form, &$form_state, $form_id) {
 /**
  * Retrieve variable configuration from the cache.
  */
-function strongarm_get_cache() {
+function strongarm_get_cache($reset = FALSE) {
   static $conf;
   if (!isset($conf) || $reset) {
     $conf = array();
@@ -159,7 +159,7 @@ function _strongarm_lockdown(&$form, $pattern = '', $position = STRONGARM_PATTER
     }
 
     // If this is a tree'd element, recurse
-    if ($form[$elem]['#tree'] || !empty($children)) {
+    if (!empty($form[$elem]['#tree']) || !empty($children)) {
       $altered = $altered || _strongarm_lockdown($form[$elem], $pattern, $position);
     }
 
