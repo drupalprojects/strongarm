@@ -55,7 +55,7 @@ function strongarm_form_alter(&$form, &$form_state, $form_id) {
     drupal_add_css(drupal_get_path('module', 'strongarm') .'/strongarm.css');
     $altered = _strongarm_lockdown($form, $pattern, $position);
     if ($altered) {
-      drupal_set_message(t('The hilighted fields below may need to retain their current values for your site to operate properly. Settings may be disabled or reverted automatically if they are not compatible with one or more of your site\'s modules.'), 'warning');
+      drupal_set_message(t('The highlighted fields below may need to retain their current values for your site to operate properly. Settings may be disabled or reverted automatically if they are not compatible with one or more of your site\'s modules.'), 'warning');
     }
   }
 }
