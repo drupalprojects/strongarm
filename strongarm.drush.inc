@@ -31,10 +31,23 @@ function strongarm_drush_command() {
 function strongarm_drush_export() {
   $vars = func_get_args();
   if (empty($vars)) {
+    // Pull all variables from DB.
     $result = db_query('SELECT name FROM variable');
-    $rows = array(array('Variables'));
-    while ($row = db_fetch_array($result)) {
-      $rows[] = array_values($row);
+    $variables = array();
+    while ($variable = db_fetch_object($result)) {
+      $variables[$variable->name] = $variable->name;
+    }
+
+    // Pull all variables defined in hook_strongarm(), merge them in.
+    $strongarmed = drupal_map_assoc(array_keys(strongarm_get_conf(TRUE, TRUE)));
+    $variables = $variables + $strongarmed;
+    ksort($variables);
+
+    // Output result, flag strongarmed variables.
+    $rows = array(array('Strongarmed', 'Variable name'));
+    foreach ($variables as $variable) {
+      $flag = $strongarmed[$variable] ? '*' : '';
+      $rows[] = array($flag, $variable);
     }
     drush_print_table($rows, TRUE);
   }
