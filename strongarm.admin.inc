@@ -80,11 +80,11 @@ function strongarm_admin_form() {
       );
       $form['current_value'][$name] = array(
         '#type' => 'markup',
-        '#value' => _strongarm_readable($overridden[$name]),
+        '#value' => check_plain(_strongarm_readable($overridden[$name])),
       );
       $form['default_value'][$name] = array(
         '#type' => 'markup',
-        '#value' => _strongarm_readable($var_conf[$name]),
+        '#value' => check_plain(_strongarm_readable($var_conf[$name])),
       );
       $form['culprit'][$name] = array(
         '#type' => 'markup',
