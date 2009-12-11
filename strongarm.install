@@ -17,3 +17,11 @@ function strongarm_update_6100() {
   $ret[] = update_sql("UPDATE {system} SET weight = -1000 WHERE name = 'strongarm' AND type = 'module'");
   return $ret;
 }
+
+/**
+ * Update 6100: Install CTools
+ */
+function strongarm_update_6200() {
+  drupal_install_modules(array('ctools'));
+  return array();
+}
