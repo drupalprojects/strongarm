@@ -21,15 +21,20 @@ function strongarm_set_conf($reset = FALSE) {
     $var_conf = $cache->data;
   }
   else {
-    ctools_include('export');
-    $vars = ctools_export_load_object('variable');
-    foreach ($vars as $var) {
-      $var_conf[$var->name] = $var->value;
+    // Ensure that the schema cache is not stale when we init. This check, for
+    // example, prevents strongarm from initing when install profiles are run.
+    $schema = drupal_get_schema('variable');
+    if (isset($schema['export'])) {
+      $var_conf = array();
+      ctools_include('export');
+      foreach (ctools_export_load_object('variable') as $var) {
+        $var_conf[$var->name] = $var->value;
+      }
+      cache_set('strongarm', $var_conf);
     }
-    cache_set('strongarm', $var_conf);
   }
   global $conf;
-  $conf = $var_conf;
+  $conf = isset($var_conf) ? $var_conf : $conf;
 }
 
 /**
