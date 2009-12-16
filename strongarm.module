@@ -6,6 +6,17 @@
  */
 function strongarm_init() {
   strongarm_set_conf();
+
+  // This is a workaround for the very early check of the 'site_frontpage'
+  // variable in the Drupal bootstrap process. The workaround re-runs
+  // drupal_init_path() to ensure the strongarm'ed version of
+  // 'site_frontpage' is used. Note that this may be too late if other modules
+  // weighted even lower than strongarm (which is a superlightweight -1000)
+  // rely on $_GET['q'] or 'site_frontpage' in hook_init().
+  if (empty($_REQUEST['q'])) {
+    unset($_GET['q']);
+    drupal_init_path();
+  }
 }
 
 /**
