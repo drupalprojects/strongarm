@@ -100,8 +100,25 @@ function strongarm_schema_alter(&$schema) {
       'minimum_version' => 1,
       'current_version' => 1,
     ),
+    // We declare this explicitly -- otherwise, CTools will use
+    // 'system_export_variable' as the default export callback.
+    'export callback' => 'strongarm_export_variable',
   );
   $schema['variable']['fields']['value']['serialize'] = TRUE;
+}
+
+/**
+ * CTools export function.
+ *
+ * Workaround for var_export() #fail with stdClass objects. See:
+ * http://bugs.php.net/bug.php?id=48016&edit=1. A proper patch is in the
+ * CTools issue queue here: http://drupal.org/node/661332. Once this is
+ * committed & included in a CTools release, this workaround will no
+ * longer be necessary.
+ */
+function strongarm_export_variable($variable, $indent = '') {
+  $export = ctools_export_object('variable', $variable, $indent);
+  return str_replace('stdClass::__set_state(', '(object) (', $export);
 }
 
 /**
