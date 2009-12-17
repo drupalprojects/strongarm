@@ -46,7 +46,7 @@ function strongarm_set_conf($reset = FALSE) {
     cache_set('strongarm', $var_conf);
   }
   global $conf;
-  $conf = $var_conf;
+  $conf = array_merge($var_conf, $conf);
 }
 
 /**

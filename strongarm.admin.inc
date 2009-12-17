@@ -19,6 +19,8 @@ function strongarm_get_culprits() {
  * Variable management strongarm form.
  */
 function strongarm_admin_form($form_state) {
+  global $conf;
+
   ctools_include('export');
   $vars = ctools_export_load_object('variable');
   ksort($vars);
@@ -26,7 +28,22 @@ function strongarm_admin_form($form_state) {
   foreach ($vars as $name => $variable) {
     if ($variable->export_type & EXPORT_IN_CODE) {
       $default = ctools_get_default_object('variable', $name);
-      if (($variable->export_type & EXPORT_IN_DATABASE) && ($variable->value != $default->value)) {
+
+      // If variable value does not match global $conf, this value has been
+      // hardcoded (e.g. in settings.php) and has been allowed to pass
+      // through. It cannot be reverted.
+      if ($conf[$name] !== $variable->value) {
+        $storage = t('Hardcoded');
+        $hardcoded = TRUE;
+      }
+      else {
+        $storage = ($variable->value == $default->value) ? t('Default') : t('Overridden');
+        $hardcoded = FALSE;
+      }
+
+      // If the variable is in the database and differs from its code value,
+      // allow administrator to revert its value.
+      if (!$hardcoded && ($variable->export_type & EXPORT_IN_DATABASE) && ($variable->value != $default->value)) {
         $form['revert']['#tree'] = TRUE;
         $form['revert'][$name] = array('#type' => 'checkbox');
       }
@@ -36,7 +53,7 @@ function strongarm_admin_form($form_state) {
       );
       $form['storage'][$name] = array(
         '#type' => 'markup',
-        '#value' => ($variable->value == $default->value) ? t('Default') : t('Overridden'),
+        '#value' => $storage,
       );
       $form['value'][$name] = array(
         '#type' => 'markup',
