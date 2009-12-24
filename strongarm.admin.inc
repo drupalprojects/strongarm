@@ -89,8 +89,11 @@ function strongarm_admin_revert_submit(&$form, &$form_state) {
  * Display variables in a nicer way.
  */
 function _strongarm_readable($var) {
-  if (is_string($var) || is_bool($var) || is_numeric($var)) {
+  if (is_string($var) || is_numeric($var)) {
     return truncate_utf8($var, 30, TRUE, TRUE);
+  }
+  else if (is_bool($var)) {
+    return $var ? 'TRUE' : 'FALSE';
   }
   else if (is_array($var)) {
     $test = $detected = array();
