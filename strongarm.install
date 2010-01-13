@@ -23,5 +23,9 @@ function strongarm_update_6100() {
  */
 function strongarm_update_6200() {
   drupal_install_modules(array('ctools'));
-  return array();
+  $modules = module_list();
+  if (!isset($modules['ctools'])) {
+    return array('#abort' => array('success' => FALSE, 'query' => 'Could not enable CTools.'));
+  }
+  return array(array('success' => TRUE, 'query' => 'Enabled CTools successfully.'));
 }
