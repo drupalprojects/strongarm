@@ -2,10 +2,10 @@
 // $Id$
 
 /**
- * Implementation of hook_init().
+ * Implements hook_init().
  */
 function strongarm_init() {
-  strongarm_set_conf();
+  strongarm_set_conf(TRUE);
 
   // This is a workaround for the very early check of the 'site_frontpage'
   // variable in the Drupal bootstrap process. The workaround re-runs
@@ -13,8 +13,8 @@ function strongarm_init() {
   // 'site_frontpage' is used. Note that this may be too late if other modules
   // weighted even lower than strongarm (which is a superlightweight -1000)
   // rely on $_GET['q'] or 'site_frontpage' in hook_init().
-  $_GET['q'] = strongarm_language_strip($_REQUEST['q']);
-  drupal_init_path();
+  //$_GET['q'] = strongarm_language_strip($_REQUEST['q']);
+  //drupal_path_initialize();
 }
 
 /**
@@ -74,11 +74,11 @@ function strongarm_language_strip($path) {
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function strongarm_menu() {
   $items = array();
-  $items['admin/settings/strongarm'] = array(
+  $items['admin/config/development/strongarm'] = array(
     'title' => 'Strongarm',
     'description' => 'Manage Drupal variable settings that have been strongarmed.',
     'page callback' => 'drupal_get_form',
@@ -92,7 +92,7 @@ function strongarm_menu() {
 }
 
 /**
- * Implementation of hook_form_alter() for system_module form.
+ * Implements hook_form_alter() for system_module form().
  * Clear strongarm & variable caches on modules page.
  */
 function strongarm_form_system_module_alter(&$form, &$form_state) {
@@ -100,12 +100,12 @@ function strongarm_form_system_module_alter(&$form, &$form_state) {
 }
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  */
 function strongarm_theme() {
   return array(
     'strongarm_admin_form' => array(
-      'arguments' => array(),
+      'render element' => 'form', 
       'file' => 'strongarm.admin.inc',
       'path' => drupal_get_path('module', 'strongarm'),
     ),
@@ -113,7 +113,7 @@ function strongarm_theme() {
 }
 
 /**
- * Implementation of hook_flush_caches().
+ * Implements hook_flush_caches().
  */
 function strongarm_flush_caches() {
   cache_clear_all('variables', 'cache');
@@ -121,7 +121,7 @@ function strongarm_flush_caches() {
 }
 
 /**
- * Implementation of hook_schema_alter().
+ * Implements hook_schema_alter().
  * Makes the variables table usable by ctools' export.inc.
  */
 function strongarm_schema_alter(&$schema) {

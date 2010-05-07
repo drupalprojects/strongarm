@@ -18,7 +18,7 @@ function strongarm_get_culprits() {
 /**
  * Variable management strongarm form.
  */
-function strongarm_admin_form($form_state) {
+function strongarm_admin_form($form, $form_state) {
   global $conf;
 
   ctools_include('export');
@@ -28,7 +28,6 @@ function strongarm_admin_form($form_state) {
   foreach ($vars as $name => $variable) {
     if ($variable->export_type & EXPORT_IN_CODE) {
       $default = ctools_get_default_object('variable', $name);
-
       // If variable value does not match global $conf, this value has been
       // hardcoded (e.g. in settings.php) and has been allowed to pass
       // through. It cannot be reverted.
@@ -48,16 +47,13 @@ function strongarm_admin_form($form_state) {
         $form['revert'][$name] = array('#type' => 'checkbox');
       }
       $form['name'][$name] = array(
-        '#type' => 'markup',
-        '#value' => $name,
+        '#markup' => $name,
       );
       $form['storage'][$name] = array(
-        '#type' => 'markup',
-        '#value' => $storage,
+        '#markup' => $storage,
       );
       $form['value'][$name] = array(
-        '#type' => 'markup',
-        '#value' => check_plain(_strongarm_readable($variable->value)),
+        '#markup' => check_plain(_strongarm_readable($variable->value)),
       );
     }
   }
@@ -125,7 +121,9 @@ function _strongarm_readable($var) {
 /**
  * Theme function for the strongarm admin form.
  */
-function theme_strongarm_admin_form($form) {
+function theme_strongarm_admin_form(&$vars) {
+  $form = $vars['form'];
+
   drupal_add_js('misc/tableselect.js');
   $rows = $headers = array();
   $headers[] = theme('table_select_header_cell');
@@ -140,7 +138,7 @@ function theme_strongarm_admin_form($form) {
     $row[] = drupal_render($form['value'][$name]);
     $rows[] = $row;
   }
-  $output = theme('table', $headers, $rows);
-  $output .= drupal_render($form);
+  $output = theme('table', array('header' => $headers, 'rows' => $rows));
+  $output .= drupal_render_children($form);
   return $output;
 }

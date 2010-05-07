@@ -2,11 +2,23 @@
 // $Id$
 
 /**
- * Implementation of hook_enable().
+ * @file
+ * Install, update and uninstall functions for the strongarm module.
+ *
+ */
+
+/**
+ * Implements hook_enable().
  */
 function strongarm_enable() {
   // Weight strongarm exceptionally light.
-  db_query("UPDATE {system} SET weight = -1000 WHERE name = 'strongarm' AND type = 'module'");
+  db_update('system')
+  ->fields(array(
+    'weight' =>  -1000,
+  ))
+    ->condition('name', 'strongarm')
+    ->condition('type', 'module')
+  ->execute();
 }
 
 /**
@@ -23,7 +35,7 @@ function strongarm_update_6100() {
  */
 function strongarm_update_6200() {
   drupal_install_modules(array('ctools'));
-  $modules = module_list();
+  $modules = module_implements($hook /* TODO Set this variable. */);
   if (!isset($modules['ctools'])) {
     return array('#abort' => array('success' => FALSE, 'query' => 'Could not enable CTools.'));
   }
@@ -39,7 +51,7 @@ function strongarm_update_6201() {
   foreach ($modules as $module) {
     $variables = module_invoke($module, 'strongarm');
     foreach ($variables as $variable => $value) {
-      $exists = db_result(db_query("SELECT name FROM {variable} WHERE name = '%s'", $variable));
+      $exists = db_query("SELECT name FROM {variable} WHERE name = :name", array(':name' => $variable))->fetchField();
       if (!$exists && !(is_object($value) && isset($value->api_version))) {
         variable_set($variable, $value);
         $ret[] = array('success' => TRUE, 'query' => "Set 1.x strongarmed variable {$variable} in the database.");
