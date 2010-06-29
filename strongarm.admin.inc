@@ -20,10 +20,7 @@ function strongarm_get_culprits() {
  */
 function strongarm_admin_form($form_state) {
   global $conf;
-
-  ctools_include('export');
-  $vars = ctools_export_load_object('variable');
-  ksort($vars);
+  $vars = strongarm_vars_load(TRUE, TRUE);
   $form = array('#theme' => 'strongarm_admin_form',);
   foreach ($vars as $name => $variable) {
     if ($variable->export_type & EXPORT_IN_CODE) {
