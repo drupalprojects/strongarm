@@ -38,13 +38,22 @@ function strongarm_set_conf($reset = FALSE) {
 
     $var_conf = array();
     ctools_include('export');
+    ctools_export_load_object_reset('variable');
     foreach (ctools_export_load_object('variable') as $var) {
       $var_conf[$var->name] = $var->value;
     }
     cache_set('strongarm', $var_conf);
   }
   global $conf;
-  $conf = array_merge($var_conf, $conf);
+
+  // Store the original variable values. This allows additional calls to
+  // strongarm_set_conf() to properly set Strongarm values.
+	 static $original_conf;
+  if (!isset($original_conf)) {
+    $original_conf = $conf;
+  }
+
+  $conf = array_merge($var_conf, $original_conf);
 }
 
 /**
