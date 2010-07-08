@@ -141,6 +141,20 @@ function strongarm_schema_alter(&$schema) {
 }
 
 /**
+ * Implementation hook_help().
+ */
+function strongarm_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#strongarm':
+      $output = file_get_contents(drupal_get_path('module', 'strongarm') .'/README.txt');
+      return '<pre>'. check_plain($output) .'</pre>';
+    case 'admin/settings/strongarm':
+      $output = '<p>'. t("Strongarm lets site builders manage default variable settings. All the default values provided by Strongarm are listed on this page. Any overridden value can be reverted to its default by selecting its checkbox and clicking 'Reset to defaults'.") .'</p>';
+      return $output;
+  }
+}
+
+/**
  * Load all variables (DB and Strongarmed).
  */
 function strongarm_vars_load($sorted = TRUE, $reset = FALSE) {
