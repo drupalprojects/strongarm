@@ -13,7 +13,7 @@ function strongarm_init() {
   // 'site_frontpage' is used. Note that this may be too late if other modules
   // weighted even lower than strongarm (which is a superlightweight -1000)
   // rely on $_GET['q'] or 'site_frontpage' in hook_init().
-  $_GET['q'] = strongarm_language_strip($_REQUEST['q']);
+  $_GET['q'] = strongarm_language_strip(isset($_REQUEST['q']) ? $_REQUEST['q'] : $_GET['q']);
   drupal_init_path();
 }
 
