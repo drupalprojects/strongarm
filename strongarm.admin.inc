@@ -2,20 +2,6 @@
 // $Id$
 
 /**
- * Get a map of variable to culprit (implementers of hook_strongarm()).
- */
-function strongarm_get_culprits() {
-  $culprits = array();
-  foreach (module_implements('strongarm') as $module) {
-    $module_conf = module_invoke($module, 'strongarm');
-    foreach ($module_conf as $name => $value) {
-      $culprits[$name] = $module;
-    }
-  }
-  return $culprits;
-}
-
-/**
  * Variable management strongarm form.
  */
 function strongarm_admin_form($form_state) {
