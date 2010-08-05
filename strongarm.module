@@ -193,3 +193,31 @@ if (!function_exists('variable_features_revert')) {
     cache_clear_all('variables', 'cache');
   }
 }
+
+/**
+ * Implementation of hook_features_pipe_alter() for node component.
+ * Add node type variables on behalf of core modules.
+ */
+function strongarm_features_pipe_node_alter(&$pipe, $data, $export, $module_name) {
+  if (!empty($data)) {
+    $variables = array(
+      'comment',
+      'comment_anonymous',
+      'comment_controls',
+      'comment_default_mode',
+      'comment_default_order',
+      'comment_default_per_page',
+      'comment_form_location',
+      'comment_preview',
+      'comment_subject_field',
+      'language_content_type',
+      'node_options',
+      'upload',
+    );
+    foreach ($data as $node_type) {
+      foreach ($variables as $variable_name) {
+        $pipe['variable'][] = "{$variable_name}_{$node_type}";
+      }
+    }
+  }
+}
