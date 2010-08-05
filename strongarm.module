@@ -147,16 +147,9 @@ function strongarm_help($path, $arg) {
   switch ($path) {
     case 'admin/help#strongarm':
       $output = file_get_contents(drupal_get_path('module', 'strongarm') .'/README.txt');
-      if (module_exists('markdown')) {
-        $output = filter_xss_admin(module_invoke('markdown', 'filter', 'process', 0, -1, $output));
-      }
-      else {
-        $output = '<pre>'. check_plain($output) .'</pre>';
-      }
-      return $output;
+      return module_exists('markdown') ? filter_xss_admin(module_invoke('markdown', 'filter', 'process', 0, -1, $output)) : '<pre>'. check_plain($output) .'</pre>';
     case 'admin/settings/strongarm':
-      $output = '<p>'. t("Strongarm lets site builders manage default variable settings. All the default values provided by Strongarm are listed on this page. Any overridden value can be reverted to its default by selecting its checkbox and clicking 'Reset to defaults'.") .'</p>';
-      return $output;
+      return '<p>'. t("Strongarm lets site builders manage default variable settings. All the default values provided by Strongarm are listed on this page. Any overridden value can be reverted to its default by selecting its checkbox and clicking 'Reset to defaults'.") .'</p>';
   }
 }
 
