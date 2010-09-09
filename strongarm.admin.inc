@@ -2,32 +2,16 @@
 // $Id$
 
 /**
- * Get a map of variable to culprit (implementers of hook_strongarm()).
- */
-function strongarm_get_culprits() {
-  $culprits = array();
-  foreach (module_implements('strongarm') as $module) {
-    $module_conf = module_invoke($module, 'strongarm');
-    foreach ($module_conf as $name => $value) {
-      $culprits[$name] = $module;
-    }
-  }
-  return $culprits;
-}
-
-/**
  * Variable management strongarm form.
  */
-function strongarm_admin_form($form, $form_state) {
+function strongarm_admin_form($form_state) {
   global $conf;
-
-  ctools_include('export');
-  $vars = ctools_export_load_object('variable');
-  ksort($vars);
+  $vars = strongarm_vars_load(TRUE, TRUE);
   $form = array('#theme' => 'strongarm_admin_form',);
   foreach ($vars as $name => $variable) {
     if ($variable->export_type & EXPORT_IN_CODE) {
       $default = ctools_get_default_object('variable', $name);
+
       // If variable value does not match global $conf, this value has been
       // hardcoded (e.g. in settings.php) and has been allowed to pass
       // through. It cannot be reverted.
@@ -46,15 +30,9 @@ function strongarm_admin_form($form, $form_state) {
         $form['revert']['#tree'] = TRUE;
         $form['revert'][$name] = array('#type' => 'checkbox');
       }
-      $form['name'][$name] = array(
-        '#markup' => $name,
-      );
-      $form['storage'][$name] = array(
-        '#markup' => $storage,
-      );
-      $form['value'][$name] = array(
-        '#markup' => check_plain(_strongarm_readable($variable->value)),
-      );
+      $form['name'][$name] = array('#markup' => $name);
+      $form['storage'][$name] = array('#markup' => $storage);
+      $form['value'][$name] = array('#markup' => check_plain(_strongarm_readable($variable->value)));
     }
   }
   if (!empty($form['revert'])) {

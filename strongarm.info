@@ -1,8 +1,8 @@
 ; $Id$
-name = "Strongarm"
-description = "Enforces variable values defined by modules that need settings set to operate properly."
+name = Strongarm
+description = Enforces variable values defined by modules that need settings set to operate properly.
 core = 7.x
-dependencies[] = "ctools"
+dependencies[] = ctools
 
 files[] = strongarm.admin.inc
 files[] = strongarm.install
