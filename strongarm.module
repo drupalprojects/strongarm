@@ -21,7 +21,7 @@ function strongarm_init() {
  * Retrieve variable configuration from the cache.
  */
 function strongarm_set_conf($reset = FALSE) {
-  $varcache = cache_get('variables', 'cache');
+  $varcache = cache_get('variables', 'cache_bootstrap');
   $cache = cache_get('strongarm', 'cache');
   // The > comparison here is cautious but ensures that the strongarm cache
   // actually was populated after the variable cache. It is possible with
