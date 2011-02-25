@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 define('STRONGARM_PATTERN_PREFIX', 0);
 define('STRONGARM_PATTERN_SUFFIX', 1);
