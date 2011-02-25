@@ -1,4 +1,3 @@
-$Id$
 
 Strongarm 2.x for Drupal 6.x
 ----------------------------
