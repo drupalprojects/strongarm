@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * Main admin page menu callback.

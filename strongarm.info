@@ -1,4 +1,3 @@
-; $Id$
 name = "Strongarm"
 description = "Enforces variable values defined by modules that need settings set to operate properly."
 core = "6.x"
