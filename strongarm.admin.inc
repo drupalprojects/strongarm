@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * Variable management strongarm form.
