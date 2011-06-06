@@ -177,8 +177,10 @@ function strongarm_features_pipe_node_alter(&$pipe, $data, $export) {
       'comment_preview',
       'comment_subject_field',
       'language_content_type',
+      'menu_options',
+      'menu_parent',
       'node_options',
-      'upload',
+      'node_submitted',
     );
     foreach ($data as $node_type) {
       foreach ($variables as $variable_name) {
