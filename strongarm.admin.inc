@@ -29,9 +29,17 @@ function strongarm_admin_form($form_state) {
         $form['revert']['#tree'] = TRUE;
         $form['revert'][$name] = array('#type' => 'checkbox');
       }
-      $form['name'][$name] = array('#markup' => $name);
-      $form['storage'][$name] = array('#markup' => $storage);
-      $form['value'][$name] = array('#markup' => check_plain(_strongarm_readable($variable->value)));
+      if (module_exists('variable') && ($info = variable_get_info($name))) {
+        $form['name'][$name] = array('#markup' => $info['title'] . '<br/>' . $name);
+        $form['storage'][$name] = array('#markup' => $storage);
+        $info['value'] = $variable->value;
+        $form['value'][$name] = array('#markup' => variable_format_value($info));        
+      }
+      else {
+        $form['name'][$name] = array('#markup' => $name);
+        $form['storage'][$name] = array('#markup' => $storage);
+        $form['value'][$name] = array('#markup' => check_plain(_strongarm_readable($variable->value)));
+      }
     }
   }
   if (!empty($form['revert'])) {
