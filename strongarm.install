@@ -47,3 +47,18 @@ function strongarm_update_6201() {
   }
   return $ret;
 }
+
+/**
+ * Update 6202: Set all strongarm variables that are only set in code in the database.
+ */
+function strongarm_update_6202() {
+  $variables = strongarm_vars_load();
+  if (!empty($variables)) {
+    foreach ($variables as $var_name => $var) {
+      $exists = db_result(db_query("SELECT name FROM {variable} WHERE name = '%s'", $var_name));
+      if (!$exists) {
+        variable_set($var_name, $var->value);
+      }
+    }
+  }
+}
