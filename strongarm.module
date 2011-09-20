@@ -203,6 +203,7 @@ function strongarm_features_pipe_node_alter(&$pipe, $data, $export) {
       'menu_options',
       'menu_parent',
       'node_options',
+      'node_preview',
       'node_submitted',
     );
     foreach ($data as $node_type) {
