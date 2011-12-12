@@ -185,10 +185,10 @@ function variable_features_export_render($module, $data) {
 }
 
 /**
- * Implementation of hook_features_pipe_alter() for node component.
+ * Implementation of hook_features_pipe_component_alter() for node component.
  * Add node type variables on behalf of core modules.
  */
-function strongarm_features_pipe_node_alter(&$pipe, $data, $export, $module_name) {
+function strongarm_features_pipe_node_alter(&$pipe, $data, $export) {
   if (!empty($data)) {
     $variables = array(
       'comment',
