@@ -52,6 +52,7 @@ function strongarm_update_6201() {
  * Update 6202: Set all strongarm variables that are only set in code in the database.
  */
 function strongarm_update_6202() {
+  $ret = array();
   $variables = strongarm_vars_load();
   if (!empty($variables)) {
     foreach ($variables as $var_name => $var) {
@@ -61,4 +62,5 @@ function strongarm_update_6202() {
       }
     }
   }
+  return $ret;
 }
