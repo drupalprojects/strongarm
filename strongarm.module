@@ -115,7 +115,7 @@ if (!function_exists('variable_features_revert')) {
 
     $vars = strongarm_vars_load(TRUE, TRUE);
     foreach ($defaults as $name => $default) {
-      if (isset($vars[$name]->in_code_only) || ($default->value != $vars[$name]->value)) {
+      if (isset($vars[$name]->in_code_only) || ($default->value !== $vars[$name]->value)) {
         variable_set($name, $default->value);
       }
     }
