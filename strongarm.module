@@ -175,6 +175,7 @@ function variable_features_export_render($module, $data) {
   $result = db_select('variable', 'v')
     ->fields('v', array('name', 'value'))
     ->condition('name', $data, 'IN')
+    ->orderBy('name')
     ->execute();
   foreach ($result as $object) {
     $object = _ctools_export_unpack_object($schema, $object);
