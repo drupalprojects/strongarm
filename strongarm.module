@@ -174,7 +174,7 @@ function variable_features_export_render($module, $data) {
   $code = '  $export = array();'."\n\n";
   $identifier = $schema['export']['identifier'];
 
-  $result = db_query("SELECT * FROM {variable} WHERE name IN (" . db_placeholders($data, 'text') . ")", $data);
+  $result = db_query("SELECT * FROM {variable} WHERE name IN (" . db_placeholders($data, 'text') . ") ORDER BY name", $data);
   while ($object = db_fetch_object($result)) {
     $object = _ctools_export_unpack_object($schema, $object);
     $code .= _ctools_features_export_crud_export('variable', $object, '  ');
