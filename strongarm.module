@@ -134,7 +134,7 @@ function variable_features_rebuild($module) {
 
   $vars = strongarm_vars_load(TRUE, TRUE);
   foreach ($defaults as $name => $default) {
-    if (!empty($vars[$name]->in_code_only) || (MAINTENANCE_MODE == 'install' && $vars[$name]->export_type & EXPORT_IN_CODE)) {
+    if (isset($vars[$name]->in_code_only) || (defined('MAINTENANCE_MODE') && MAINTENANCE_MODE == 'install' && $vars[$name]->export_type & EXPORT_IN_CODE)) {
       variable_set($name, $default->value);
     }
   }
